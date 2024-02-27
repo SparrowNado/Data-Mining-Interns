@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -145,25 +146,27 @@ func processJSON(filePath string) error {
 		} `xml:"states" json:"states,omitempty"`
 	}
 
+	fmt.Printf("Processing file: %s\n", filePath)
+
 	// Open the JSON file
 	file, err := os.Open(filePath)
 	if err != nil {
-		return err
+		return fmt.Errorf("error opening file %s: %v", filePath, err)
 	}
 	defer file.Close()
 
 	// Read the JSON file into a byte slice
 	data, err := io.ReadAll(file)
 	if err != nil {
-		return err
+		return fmt.Errorf("error reading file %s: %v", filePath, err)
 	}
 
 	var rawData SUSE
 
 	// Unmarshal the JSON data into the SUSE struct
-	err = json.Unmarshal([]byte(data), &rawData)
+	err = json.Unmarshal(data, &rawData)
 	if err != nil {
-		return err
+		return fmt.Errorf("error unmarshalling JSON from file %s: %v", filePath, err)
 	}
 
 	vulns := make(map[string]Vulnerability)
@@ -188,7 +191,7 @@ func processJSON(filePath string) error {
 	outputDir := filepath.Join("OUTPUT", filepath.Dir(filePath))
 	err = os.MkdirAll(outputDir, 0755)
 	if err != nil {
-		return err
+		return fmt.Errorf("error creating output directory: %v", err)
 	}
 
 	// Extract the filename
@@ -200,19 +203,20 @@ func processJSON(filePath string) error {
 	// Write the vulns to the output JSON file
 	vulnsFile, err := os.Create(outputFile)
 	if err != nil {
-		return err
+		return fmt.Errorf("error creating output file: %v", err)
 	}
 	defer vulnsFile.Close()
 
 	vulnsData, err := json.MarshalIndent(vulns, "", "    ")
 	if err != nil {
-		return err
+		return fmt.Errorf("error marshalling JSON: %v", err)
 	}
 
 	_, err = vulnsFile.Write(vulnsData)
 	if err != nil {
-		return err
+		return fmt.Errorf("error writing to output file: %v", err)
 	}
 
+	fmt.Printf("Processed file: %s\n", filePath)
 	return nil
 }
