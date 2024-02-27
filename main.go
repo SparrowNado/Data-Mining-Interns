@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("All files processed successfully.")
 }
 
 func processDirectory(dirPath string) error {
@@ -218,6 +219,5 @@ func processJSON(filePath string) error {
 	}
 
 	fmt.Printf("Processed file: %s\n", filePath)
-	fmt.Printf("All Files Processed Successfully")
 	return nil
 }
