@@ -218,5 +218,6 @@ func processJSON(filePath string) error {
 	}
 
 	fmt.Printf("Processed file: %s\n", filePath)
+	fmt.Printf("All Files Processed Successfully")
 	return nil
 }
