@@ -157,7 +157,7 @@ func main() {
 		processData(&dataModel, file.Name(), vulns)
 	}
 
-	outputFolder := "Output"
+	outputFolder := "OUTPUT/Suse"
 	if _, err := os.Stat(outputFolder); os.IsNotExist(err) {
 		if err := os.Mkdir(outputFolder, 0755); err != nil {
 			panic(err)
