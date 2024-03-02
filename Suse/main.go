@@ -164,7 +164,7 @@ func main() {
 		}
 	}
 
-	compiledFilePath := filepath.Join(outputFolder, "Output.json")
+	compiledFilePath := filepath.Join(outputFolder, "Suse_output.json")
 	compiledFile, err := os.Create(compiledFilePath)
 	if err != nil {
 		panic(err)
